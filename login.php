@@ -13,41 +13,47 @@ if($METHOD === "POST"){
 	if($usr == $row['username']){
 	    $db_password = $row["password"];
 	    if(password_verify($password,$db_password)){
-		echo json_encode([
-		    "message" => "Correct Password",
-		   "code" => 200
-		]);
+		die(
+		    json_encode([
+			"message" => "Correct Password",
+			"code" => 200
+		    ])
+		);
 	    }
 	    else{
-		echo json_encode([
-		    "message" => "Wrong Password",
-		    "code" => 200
-		]);
+		die(
+		    json_encode([
+			"message" => "Wrong Password",
+			"code" => 200
+		    ])
+		);
 	    }
-	    die();
 	}
-	else{
-	    echo json_encode([
-		"message" => "User does not exist.",
-		"code" => 200
-	    ]);
-	    die();
-	}
+	else
+	    die(
+		json_encode([
+		    "message" => "User does not exist.",
+		    "code" => 200
+		])
+	    );
+	
     }
     else{
 	http_response_code(400);
-	echo json_encode([	    
-	    "message" => "incomplete argument",
-	    "code" => "400"
-	]);
-	die();
+	die(
+	    json_encode([	    
+		"message" => "incomplete argument",
+		"code" => "400"
+	    ])
+	);
     }
 }
 else{
     http_response_code(405);
-    echo json_encode([
-	"message" => "Invalid Method",
-	"code" => 405
-    ]);
-    die();
+    die(
+	json_encode([
+	    "message" => "Invalid Method",
+	    "code" => 405
+	])
+    );
 }
