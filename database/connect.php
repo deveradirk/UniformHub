@@ -10,7 +10,6 @@ try {
     );
 }
 catch(PDOException $e){
-    http_response_code(500);
     die(
 	json_encode([
 	    "message" => "Server cannot connect to the database.",

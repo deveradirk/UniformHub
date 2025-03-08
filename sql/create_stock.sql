@@ -3,7 +3,9 @@ CREATE TABLE stock(
     fk_uniform_id INT UNSIGNED,
     sold_to INT UNSIGNED,
     FOREIGN KEY(fk_uniform_id)
-	REFERENCES uniforms(id),
+	REFERENCES uniforms(id)
+	ON UPDATE CASCADE,
     FOREIGN KEY(sold_to)
-	REFERNCES users(id)
+	REFERENCES users(id)
+	ON UPDATE CASCADE
 );

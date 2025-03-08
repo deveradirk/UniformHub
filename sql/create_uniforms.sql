@@ -9,5 +9,6 @@ CREATE TABLE uniforms(
 	'l',
 	'xl',
 	'2xl',
-    )
+    ),
+    department TEXT
 )

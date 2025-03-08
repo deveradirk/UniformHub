@@ -6,28 +6,28 @@ if($METHOD === "POST"){
     $stmt = $dbconn->prepare("SELECT username,password FROM users WHERE username = ?");
     $usr = $_POST["username"];
     $password = $_POST["password"];
-    if(isset($usr) && isset($password)){
+    if(!empty($usr) && !empty($password)){
 	$stmt->bindValue(1, $usr, PDO::PARAM_INT);
 	$stmt->execute();
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
-	if($usr == $row['username']){
+	if(!empty($row)){
 	    $db_password = $row["password"];
-	    if(password_verify($password,$db_password)){
+	    if(password_verify($password,$db_password))
 		die(
 		    json_encode([
 			"message" => "Correct Password",
 			"code" => 200
 		    ])
 		);
-	    }
-	    else{
+	    
+	    else
 		die(
 		    json_encode([
 			"message" => "Wrong Password",
 			"code" => 200
 		    ])
 		);
-	    }
+	    
 	}
 	else
 	    die(
@@ -38,18 +38,16 @@ if($METHOD === "POST"){
 	    );
 	
     }
-    else{
-	http_response_code(400);
+    else
 	die(
 	    json_encode([	    
 		"message" => "incomplete argument",
 		"code" => "400"
 	    ])
 	);
-    }
+    
 }
 else{
-    http_response_code(405);
     die(
 	json_encode([
 	    "message" => "Invalid Method",
