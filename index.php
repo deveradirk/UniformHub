@@ -3,5 +3,4 @@
     spl_autoload_register(function($className){
 	include PUBLIC_DIR . "/$className.php";
     });
-
     phpinfo();
