@@ -62,8 +62,8 @@ $action = [
 
     },
     "PUT" => function()use(&$dbconn){
-	$params = ["user_id", "department"];
-	$params_missing = check_params_missing($params, $_POST);
+	$params = ["user_id", "department", "size", "name"];
+	$params_missing = check_params_missing($params, $_REQUEST);
 	if(!empty($params_missing)){
 	    $message = "Missing params: " . implode(", ", $params_missing);
 	    die_json(array(
@@ -86,9 +86,13 @@ $action = [
 		"code" => 200
 	    ));
 
-	$stmt = $dbconn->prepare("SELECT stocks.*, uniforms.department FROM stocks, uniforms WHERE department = :department AND sold_to IS NULL");
-	$stmt->bindValue(":department", $_REQUEST["department"]);
+	$stmt = $dbconn->prepare("SELECT * FROM uniforms,stocks WHERE sold_to IS NULL AND uniforms.id = stocks.fk_uniform_id AND uniforms.department= :department AND uniforms.size= :size AND uniforms.name= :name");
+	$stmt->bindValue("department", $_REQUEST["department"]);
+	$stmt->bindValue("size", $_REQUEST["size"]);
+	$stmt->bindValue("name", $_REQUEST["name"]);
+	$stmt->execute();
 	$available_row = $stmt->fetch(PDO::FETCH_ASSOC);
+
 	if(empty($available_row))
 	    die_json(array(
 		"message" => "No more available stocks"
