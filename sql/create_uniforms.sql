@@ -8,7 +8,7 @@ CREATE TABLE uniforms(
 	'm',
 	'l',
 	'xl',
-	'2xl',
+	'2xl'
     ),
     department TEXT
-)
+);

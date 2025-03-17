@@ -1,4 +1,4 @@
-CREATE TABLE stock(
+CREATE TABLE stocks(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     fk_uniform_id INT UNSIGNED,
     sold_to INT UNSIGNED,

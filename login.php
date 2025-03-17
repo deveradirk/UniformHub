@@ -3,8 +3,8 @@ include "database/connect.php";
 
 $METHOD = $_SERVER["REQUEST_METHOD"];
 if($METHOD === "POST"){
-    $stmt = $dbconn->prepare("SELECT username,password FROM users WHERE username = ?");
-    $usr = $_POST["username"];
+    $stmt = $dbconn->prepare("SELECT email,password FROM users WHERE email = ?");
+    $usr = $_POST["email"];
     $password = $_POST["password"];
     if(!empty($usr) && !empty($password)){
 	$stmt->bindValue(1, $usr, PDO::PARAM_INT);

@@ -3,13 +3,11 @@ $ini = parse_ini_file(".env");
 define("API_KEY", $ini["API_KEY"]);
 class JWT{
     private string $secret_key;
-    private int $expiration_duration;
 
 
-    public function __construct(string $signed_key, int $expiration_duration)
+    public function __construct(string $signed_key)
     {
 	$this->secret_key = $signed_key;
-	$this->expiration_duration = $expiration_duration;
     }
 
     private function encode_base64(string $text) : string {
@@ -18,7 +16,7 @@ class JWT{
     private function decode_base64(string $base64) : string {
 	return base64_decode(str_replace(["-","_"],["+", "/"], $base64));
     }
-    public function encode(string $payload) : string {
+    public function encode(string $payload, int $expiration_duration) : string {
 	$issuedAt = time();
 	$jwt_header = [
 	    "alg" => "HS512",
@@ -26,7 +24,7 @@ class JWT{
 	];
 	$jwt_payload = [
 	    "iat" => $issuedAt,
-	    "exp" => $issuedAt+$this->expiration_duration,
+	    "exp" => $issuedAt+$expiration_duration,
 	    "payload" => $payload
 	];
 
@@ -44,8 +42,8 @@ class JWT{
 	    return null;
 	if(!hash_hmac("sha512", "$header.$payload", $this->secret_key, true) === $signature)
 	    return false;
-	$header = $this->decode_base64($header);
-	$payload = $this->decode_base64($payload);
+	$header = json_decode($this->decode_base64($header));
+	$payload = json_decode($this->decode_base64($payload));
 	return [$header, $payload];
     }
 

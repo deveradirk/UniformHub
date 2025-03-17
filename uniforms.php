@@ -1,7 +1,6 @@
 <?php
     include "database/connect.php";
     include "util/functions.php";
-
 $action = [
     "GET" => function()use(&$dbconn) {
 	$stmt = $dbconn->query("SELECT DISTINCT category, name, size, department, COUNT(*) as available FROM stocks, uniforms WHERE stocks.fk_uniform_id = uniforms.id AND stocks.sold_to IS NULL");
@@ -18,7 +17,7 @@ $action = [
 	$dbconn->beginTransaction();
 	$stmt = $dbconn->prepare("INSERT INTO uniforms(category, name, size, department) VALUES(:category, :name, :size, :department)");
 	$params = ["category", "name", "size", "department"];
-	$params_missing = check_params_missing($params, $_POST);
+	$params_missing = check_params_missing($params, $_REQUEST);
 	if(!empty($params_missing)){
 	    $params_missing = implode(", ", $params_missing);
 	    die_json(array(
@@ -30,9 +29,13 @@ $action = [
 	    $stmt->bindValue($param_name, $_REQUEST[$param_name]);
 	$isSuccesful = $stmt->execute();
 	if($isSuccesful){
-	    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+	    $lastId = $dbconn->lastInsertId();
+	    if($lastId === false){
+		die_json(["message" => "failed to create a stocks record.", "code" => 500]);
+	    }
+	    var_dump($lastId);
 	    $stmt = $dbconn->prepare("INSERT INTO stocks(fk_uniform_id) VALUES(:fk_uniform_id)");
-	    $stmt->bindValue(":fk_uniform_id", $row["id"], PDO::PARAM_INT);
+	    $stmt->bindValue(":fk_uniform_id", $lastId, PDO::PARAM_INT);
 	    $isSuccesful = $stmt->execute();
 	    if(!$isSuccesful){
 		$dbconn->rollBack();
@@ -108,6 +111,7 @@ $action = [
 
     }
 ];
+
 
 $action = $action[$_SERVER["REQUEST_METHOD"]];
 if(!is_callable($action))

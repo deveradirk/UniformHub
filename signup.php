@@ -12,7 +12,7 @@ if($_SERVER["REQUEST_METHOD"] != "POST")
 $colnames = [
     "user_id",
     "fullname",
-    "username",
+    "email",
     "password",
     "role"
 ];
@@ -33,8 +33,8 @@ for($i = 0, $len = count($colnames); $i < $len; $i++){
     $row[$colnames[$i]] = $post[$i];
 }
 
-$stmt = $dbconn->prepare("SELECT username FROM users WHERE username = :username");
-$stmt->bindValue(":username", $row["username"], PDO::PARAM_STR);
+$stmt = $dbconn->prepare("SELECT email FROM users WHERE email = :email");
+$stmt->bindValue(":email", $row["email"], PDO::PARAM_STR);
 $stmt->execute();
 $check_row = $stmt->fetch(PDO::FETCH_ASSOC);
 if(!empty($check_row)){
@@ -46,7 +46,7 @@ if(!empty($check_row)){
     );
 }
 
-$stmt = $dbconn->prepare("INSERT INTO users(user_id, fullname,username,password,role) VALUES(:user_id,:fullname,:username,:password,:role)");
+$stmt = $dbconn->prepare("INSERT INTO users(user_id, fullname,email,password,role) VALUES(:user_id,:fullname,:email,:password,:role)");
 $row["password"] = password_hash($row["password"], PASSWORD_ARGON2ID);
 for($i = 0, $len = count($colnames);$i < $len;$i++)
     $stmt->bindValue($colnames[$i], $row[$colnames[$i]], PDO::PARAM_STR);
