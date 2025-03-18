@@ -17,7 +17,7 @@
 {
     category, name, size, department
 }
-## PUT /uniforms.php
+## PUT /uniforms.php?\<params\>
 {
     user_id, name, size, department
 }
