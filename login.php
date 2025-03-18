@@ -3,7 +3,7 @@ include "database/connect.php";
 
 $METHOD = $_SERVER["REQUEST_METHOD"];
 if($METHOD === "POST"){
-    $stmt = $dbconn->prepare("SELECT user_id,email,password FROM users WHERE email = ?");
+    $stmt = $dbconn->prepare("SELECT user_id ,email,password FROM users WHERE email = ?");
     $usr = $_POST["email"];
     $password = $_POST["password"];
     if(!empty($usr) && !empty($password)){

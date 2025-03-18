@@ -52,10 +52,16 @@ for($i = 0, $len = count($colnames);$i < $len;$i++)
 try {
     $isSuccessful = $stmt->execute();
 }catch(PDOException $e){
-    echo json_encode(array(
-	"message" => "Unable to create user, Malformed request.",
-	"code" => 400
-    ));
+    if($e->errorInfo[1] === 1062)
+	echo json_encode(array(
+	    "message" => "user already exist",
+	    "code" => 200
+	));
+    else
+	echo json_encode(array(
+	    "message" => "Unable to create user, Malformed request.",
+	    "code" => 400
+	));
     die();
 }
 

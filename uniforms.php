@@ -3,7 +3,7 @@
     include "util/functions.php";
 $action = [
     "GET" => function()use(&$dbconn) {
-	$stmt = $dbconn->query("SELECT DISTINCT category, name, size, department, image_url, COUNT(*) as available FROM stocks, uniforms WHERE stocks.fk_uniform_id = uniforms.id AND stocks.sold_to IS NULL");
+	$stmt = $dbconn->query("SELECT DISTINCT category, name, size, department, uniforms.image_url, COUNT(*) as available FROM stocks, uniforms WHERE stocks.fk_uniform_id = uniforms.id AND stocks.sold_to IS NULL");
 	$available_uniforms = $stmt->fetch(PDO::FETCH_NAMED);
 	if(empty($available_uniforms))
 	    $available_uniforms = array();
