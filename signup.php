@@ -45,7 +45,6 @@ if(!empty($check_row)){
 	])
     );
 }
-
 $stmt = $dbconn->prepare("INSERT INTO users(user_id, fullname,email,password,role) VALUES(:user_id,:fullname,:email,:password,:role)");
 $row["password"] = password_hash($row["password"], PASSWORD_ARGON2ID);
 for($i = 0, $len = count($colnames);$i < $len;$i++)
