@@ -3,7 +3,7 @@
     include "util/functions.php";
 $action = [
     "GET" => function()use(&$dbconn) {
-	$stmt = $dbconn->query("SELECT DISTINCT category, name, size, department, COUNT(*) as available FROM stocks, uniforms WHERE stocks.fk_uniform_id = uniforms.id AND stocks.sold_to IS NULL");
+	$stmt = $dbconn->query("SELECT DISTINCT category, name, size, department, image_url, COUNT(*) as available FROM stocks, uniforms WHERE stocks.fk_uniform_id = uniforms.id AND stocks.sold_to IS NULL");
 	$available_uniforms = $stmt->fetch(PDO::FETCH_NAMED);
 	if(empty($available_uniforms))
 	    $available_uniforms = array();
@@ -15,7 +15,7 @@ $action = [
     },
     "POST" => function()use(&$dbconn){
 	$dbconn->beginTransaction();
-	$stmt = $dbconn->prepare("INSERT INTO uniforms(category, name, size, department) VALUES(:category, :name, :size, :department)");
+	$stmt = $dbconn->prepare("INSERT INTO uniforms(category, name, size, department, image_url) VALUES(:category, :name, :size, :department, :image_url)");
 	$params = ["category", "name", "size", "department"];
 	$params_missing = check_params_missing($params, $_REQUEST);
 	if(!empty($params_missing)){
@@ -25,6 +25,7 @@ $action = [
 		"code" => 400
 	    ));
 	}
+	$params["image_url"] = "/uniform/" . $params["department"] . "_" . $params["name"];
 	foreach($params as $param_name)
 	    $stmt->bindValue($param_name, $_REQUEST[$param_name]);
 	$isSuccesful = $stmt->execute();

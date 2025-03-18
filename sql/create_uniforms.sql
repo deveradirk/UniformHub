@@ -1,7 +1,8 @@
 CREATE TABLE uniforms(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    category TEXT,
-    name TEXT,
+    category VARCHAR(255),
+    name VARCHAR(255),
+    image_url VARCHAR(2083),
     size ENUM(
 	'xs',
 	's',
