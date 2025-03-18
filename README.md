@@ -21,3 +21,9 @@
 {
     user_id, name, size, department
 }
+## GET /audit.php?user_id=\<user_id\>
+## GET /audit.php?fetch_all=
+## POST /audit.php
+{
+    user_id, action
+}

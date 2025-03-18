@@ -11,6 +11,18 @@ $action = [
 	    ]);
 	    exit();
 	}
+	if(isset($_GET["fetch_all"])){
+	    $stmt = $dbconn->query("SELECT * FROM audit_logs");
+	    $row = $stmt->fetchAll(PDO::FETCH_NAMED);
+	    if($row === false)
+		$row = [];
+	    echo json_encode([
+		"message" => "Data fetched successfully.",
+		"code" => 200,
+		"data" => $row
+	    ]);
+	    exit();
+	}
 	var_dump(1);
 	$stmt = $dbconn->prepare("SELECT * FROM audit_logs WHERE fk_user_id = :user_id");
 	$stmt->bindValue(":user_id",$user_id);
