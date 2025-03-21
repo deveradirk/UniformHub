@@ -10,7 +10,7 @@ if($METHOD === "POST"){
 	$stmt->bindValue(1, $usr, PDO::PARAM_INT);
 	$stmt->execute();
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
-	if(!empty($row)){
+	if($row !== false){
 	    $db_password = $row["password"];
 	    if(password_verify($password,$db_password))
 		die(
@@ -25,7 +25,7 @@ if($METHOD === "POST"){
 		die(
 		    json_encode([
 			"message" => "Wrong Password",
-			"code" => 200
+			"code" => 401
 		    ])
 		);
 	    
@@ -34,7 +34,7 @@ if($METHOD === "POST"){
 	    die(
 		json_encode([
 		    "message" => "User does not exist.",
-		    "code" => 200
+		    "code" => 401
 		])
 	    );
 	
